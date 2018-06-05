@@ -112,22 +112,22 @@ steps:
         set:
           - '${{BuildingTestDockerImage.imageId}}':
               - SELENIUM_DVTS: false
-  ArchiveSeleniumDVTReports:
-    title: Archiving Selenium DVT Reports
-    image: mesosphere/aws-cli
-    working_directory: ./
-    commands:
-      - apk update
-      - apk upgrade
-      - apk add bash
-      - bash -c 'IFS=" " read -a browserarray <<< "${{BROWSERS}}" && for browser in "${browserarray[@]}"; do BROWSER=$browser aws s3 cp ./selenium-report-${browser}.html s3://${{S3_BUCKETNAME}}/${{CF_BUILD_ID}}/selenium-report-${browser}.html --acl public-read; done'
-    on_success:
-     metadata:
-        set:
-          # I manually setup metadata for each browser
-          - ${{BuildingTestDockerImage.imageId}}:
-              - CHROME_SELENIUM_DVTS: "https://s3.${{AWS_DEFAULT_REGION}}.amazonaws.com/${{S3_BUCKETNAME}}/${{CF_BUILD_ID}}/selenium-report-chrome.html"
-              - FIREFOX_SELENIUM_DVTS: "https://s3.${{AWS_DEFAULT_REGION}}.amazonaws.com/${{S3_BUCKETNAME}}/${{CF_BUILD_ID}}/selenium-report-firefox.html"
+  #ArchiveSeleniumDVTReports:
+    # title: Archiving Selenium DVT Reports
+    # image: mesosphere/aws-cli
+    # working_directory: ./
+    # commands:
+    #   - apk update
+    #   - apk upgrade
+    #   - apk add bash
+    #   - bash -c 'IFS=" " read -a browserarray <<< "${{BROWSERS}}" && for browser in "${browserarray[@]}"; do BROWSER=$browser aws s3 cp ./selenium-report-${browser}.html s3://${{S3_BUCKETNAME}}/${{CF_BUILD_ID}}/selenium-report-${browser}.html --acl public-read; done'
+    # on_success:
+    #  metadata:
+    #     set:
+    #       # I manually setup metadata for each browser
+    #       - ${{BuildingTestDockerImage.imageId}}:
+    #           - CHROME_SELENIUM_DVTS: "https://s3.${{AWS_DEFAULT_REGION}}.amazonaws.com/${{S3_BUCKETNAME}}/${{CF_BUILD_ID}}/selenium-report-chrome.html"
+    #           - FIREFOX_SELENIUM_DVTS: "https://s3.${{AWS_DEFAULT_REGION}}.amazonaws.com/${{S3_BUCKETNAME}}/${{CF_BUILD_ID}}/selenium-report-firefox.html"
   PushChartToHelmRepository:
     title: Pushing Chart to Codefresh Chart Museum
     image: codefresh/cfstep-helm:2.9.0
